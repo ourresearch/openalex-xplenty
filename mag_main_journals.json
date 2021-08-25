@@ -1,0 +1,208 @@
+{
+    "components": [
+        {
+            "cloud_storage_source_component": {
+                "id": "component-5fbb7d",
+                "name": "journals",
+                "alias": "journals",
+                "xy": [
+                    392,
+                    112
+                ],
+                "connection": {
+                    "id": 9943,
+                    "type": "azureblobstorage",
+                    "name": "mag azure"
+                },
+                "schema": {
+                    "valid": true,
+                    "fields": [
+                        {
+                            "name": "field1",
+                            "alias": "journal_id",
+                            "data_type": "long"
+                        },
+                        {
+                            "name": "field2",
+                            "alias": "rank",
+                            "data_type": "int"
+                        },
+                        {
+                            "name": "field3",
+                            "alias": "normalized_name",
+                            "data_type": "string"
+                        },
+                        {
+                            "name": "field4",
+                            "alias": "display_name",
+                            "data_type": "string"
+                        },
+                        {
+                            "name": "field5",
+                            "alias": "issn",
+                            "data_type": "string"
+                        },
+                        {
+                            "name": "field6",
+                            "alias": "publisher",
+                            "data_type": "string"
+                        },
+                        {
+                            "name": "field7",
+                            "alias": "webpage",
+                            "data_type": "string"
+                        },
+                        {
+                            "name": "field8",
+                            "alias": "paper_count",
+                            "data_type": "long"
+                        },
+                        {
+                            "name": "field9",
+                            "alias": "paper_family_count",
+                            "data_type": "long"
+                        },
+                        {
+                            "name": "field10",
+                            "alias": "citation_count",
+                            "data_type": "long"
+                        },
+                        {
+                            "name": "field11",
+                            "alias": "created_date",
+                            "data_type": "string"
+                        }
+                    ]
+                },
+                "cloud_storage_connection_id": "9943",
+                "bucket": "mag-container",
+                "path": "mag/2021-05-10/mag/Journals.txt",
+                "manifest_path": "",
+                "manifest_bucket": "",
+                "manifest_connection": {},
+                "source_path_field_alias": "",
+                "char_encoding": "utf-8",
+                "before_action": "none",
+                "record_delimiter": "new_line",
+                "record_type": "delimited",
+                "json_path": "$",
+                "record_settings": {
+                    "field_delimiter": "\\t",
+                    "text_qualifier": "\"",
+                    "skip_header": false,
+                    "escape_character": "\""
+                }
+            }
+        },
+        {
+            "amazon_redshift_destination_component": {
+                "id": "component-246cb4",
+                "name": "amazon_redshift_journals",
+                "alias": "amazon_redshift_journals",
+                "xy": [
+                    392,
+                    336
+                ],
+                "connection": {
+                    "id": 9364,
+                    "type": "redshift",
+                    "name": "redshift ricks"
+                },
+                "schema": {
+                    "valid": true,
+                    "fields": []
+                },
+                "database_connection_id": "9364",
+                "table_name": "mag_main_journals",
+                "create_table": true,
+                "add_columns": true,
+                "column_mappings": [
+                    {
+                        "field_name": "journal_id",
+                        "column_name": "journal_id",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "rank",
+                        "column_name": "rank",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "normalized_name",
+                        "column_name": "normalized_name",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "display_name",
+                        "column_name": "display_name",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "issn",
+                        "column_name": "issn",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "publisher",
+                        "column_name": "publisher",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "webpage",
+                        "column_name": "webpage",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "paper_count",
+                        "column_name": "paper_count",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "paper_family_count",
+                        "column_name": "paper_family_count",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "citation_count",
+                        "column_name": "citation_count",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "created_date",
+                        "column_name": "created_date",
+                        "is_merge_key": false
+                    }
+                ],
+                "operation_type": "truncate_and_insert",
+                "intermediate_compression_type": "none",
+                "empty_as_null": true,
+                "blank_as_null": true,
+                "null_string": "\\N",
+                "trim_blanks": true,
+                "max_errors": 0,
+                "explicit_ids": false,
+                "truncate_columns": true,
+                "round_decimals": true,
+                "replacement_char": "?",
+                "comp_update": "auto",
+                "comp_rows": 100000
+            }
+        }
+    ],
+    "edges": [
+        {
+            "id": "edge-36dcc3",
+            "label": "edge-36dcc3",
+            "order": 0,
+            "source_index": 0,
+            "source": "component-5fbb7d",
+            "target": "component-246cb4"
+        }
+    ],
+    "variables": {
+        "_BYTES_PER_REDUCER": "10971520",
+        "_DEFAULT_PARALLELISM": "25",
+        "_COPY_PARALLELISM": "(int)$_CLUSTER_NODES_COUNT * 25",
+        "_PARQUET_COMPRESSION": "'GZIP'"
+    }
+}

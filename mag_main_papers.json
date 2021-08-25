@@ -1,0 +1,348 @@
+{
+    "components": [
+        {
+            "cloud_storage_source_component": {
+                "id": "component-30df56",
+                "name": "papers",
+                "alias": "papers",
+                "xy": [
+                    224,
+                    112
+                ],
+                "connection": {
+                    "id": 9943,
+                    "type": "azureblobstorage",
+                    "name": "mag azure"
+                },
+                "schema": {
+                    "valid": true,
+                    "fields": [
+                        {
+                            "name": "field1",
+                            "alias": "paper_id",
+                            "data_type": "long"
+                        },
+                        {
+                            "name": "field2",
+                            "alias": "rank",
+                            "data_type": "int"
+                        },
+                        {
+                            "name": "field3",
+                            "alias": "doi",
+                            "data_type": "string"
+                        },
+                        {
+                            "name": "field4",
+                            "alias": "doc_type",
+                            "data_type": "string"
+                        },
+                        {
+                            "name": "field5",
+                            "alias": "paper_title",
+                            "data_type": "string"
+                        },
+                        {
+                            "name": "field6",
+                            "alias": "original_title",
+                            "data_type": "string"
+                        },
+                        {
+                            "name": "field7",
+                            "alias": "book_title",
+                            "data_type": "string"
+                        },
+                        {
+                            "name": "field8",
+                            "alias": "year",
+                            "data_type": "int"
+                        },
+                        {
+                            "name": "field9",
+                            "alias": "publication_date",
+                            "data_type": "string"
+                        },
+                        {
+                            "name": "field10",
+                            "alias": "online_date",
+                            "data_type": "string"
+                        },
+                        {
+                            "name": "field11",
+                            "alias": "publisher",
+                            "data_type": "string"
+                        },
+                        {
+                            "name": "field12",
+                            "alias": "journal_id",
+                            "data_type": "long"
+                        },
+                        {
+                            "name": "field13",
+                            "alias": "conference_series_id",
+                            "data_type": "long"
+                        },
+                        {
+                            "name": "field14",
+                            "alias": "conference_instance_id",
+                            "data_type": "long"
+                        },
+                        {
+                            "name": "field15",
+                            "alias": "volume",
+                            "data_type": "string"
+                        },
+                        {
+                            "name": "field16",
+                            "alias": "issue",
+                            "data_type": "string"
+                        },
+                        {
+                            "name": "field17",
+                            "alias": "first_page",
+                            "data_type": "string"
+                        },
+                        {
+                            "name": "field18",
+                            "alias": "last_page",
+                            "data_type": "string"
+                        },
+                        {
+                            "name": "field19",
+                            "alias": "reference_count",
+                            "data_type": "long"
+                        },
+                        {
+                            "name": "field20",
+                            "alias": "citation_count",
+                            "data_type": "long"
+                        },
+                        {
+                            "name": "field21",
+                            "alias": "estimated_citation",
+                            "data_type": "long"
+                        },
+                        {
+                            "name": "field22",
+                            "alias": "original_venue",
+                            "data_type": "string"
+                        },
+                        {
+                            "name": "field23",
+                            "alias": "family_id",
+                            "data_type": "long"
+                        },
+                        {
+                            "name": "field24",
+                            "alias": "family_rank",
+                            "data_type": "long"
+                        },
+                        {
+                            "name": "field25",
+                            "alias": "created_date",
+                            "data_type": "string"
+                        }
+                    ]
+                },
+                "cloud_storage_connection_id": "9943",
+                "bucket": "mag-container",
+                "path": "mag/2021-05-10/mag/Papers.txt",
+                "manifest_path": "",
+                "manifest_bucket": "",
+                "manifest_connection": {},
+                "source_path_field_alias": "",
+                "char_encoding": "utf-8",
+                "before_action": "none",
+                "record_delimiter": "new_line",
+                "record_type": "delimited",
+                "json_path": "$",
+                "record_settings": {
+                    "field_delimiter": "\\t",
+                    "text_qualifier": "\"",
+                    "skip_header": false,
+                    "escape_character": "\""
+                }
+            }
+        },
+        {
+            "amazon_redshift_destination_component": {
+                "id": "component-a50d6d",
+                "name": "amazon_redshift_1",
+                "alias": "amazon_redshift_1",
+                "xy": [
+                    224,
+                    308
+                ],
+                "connection": {
+                    "id": 9364,
+                    "type": "redshift",
+                    "name": "redshift ricks"
+                },
+                "schema": {
+                    "valid": true,
+                    "fields": []
+                },
+                "database_connection_id": "9364",
+                "table_name": "mag_main_papers",
+                "create_table": true,
+                "add_columns": true,
+                "column_mappings": [
+                    {
+                        "field_name": "paper_id",
+                        "column_name": "paper_id",
+                        "is_merge_key": true
+                    },
+                    {
+                        "field_name": "rank",
+                        "column_name": "rank",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "doi",
+                        "column_name": "doi",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "doc_type",
+                        "column_name": "doc_type",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "paper_title",
+                        "column_name": "paper_title",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "original_title",
+                        "column_name": "original_title",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "book_title",
+                        "column_name": "book_title",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "year",
+                        "column_name": "year",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "publication_date",
+                        "column_name": "publication_date",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "online_date",
+                        "column_name": "online_date",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "publisher",
+                        "column_name": "publisher",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "journal_id",
+                        "column_name": "journal_id",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "conference_series_id",
+                        "column_name": "conference_series_id",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "conference_instance_id",
+                        "column_name": "conference_instance_id",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "volume",
+                        "column_name": "volume",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "issue",
+                        "column_name": "issue",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "first_page",
+                        "column_name": "first_page",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "last_page",
+                        "column_name": "last_page",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "reference_count",
+                        "column_name": "reference_count",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "citation_count",
+                        "column_name": "citation_count",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "estimated_citation",
+                        "column_name": "estimated_citation",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "original_venue",
+                        "column_name": "original_venue",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "family_id",
+                        "column_name": "family_id",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "family_rank",
+                        "column_name": "family_rank",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "created_date",
+                        "column_name": "created_date",
+                        "is_merge_key": false
+                    }
+                ],
+                "operation_type": "truncate_and_insert",
+                "intermediate_compression_type": "gzip",
+                "empty_as_null": true,
+                "blank_as_null": true,
+                "null_string": "\\N",
+                "trim_blanks": true,
+                "max_errors": 0,
+                "explicit_ids": false,
+                "truncate_columns": true,
+                "round_decimals": true,
+                "replacement_char": "?",
+                "comp_update": "auto",
+                "comp_rows": 100000
+            }
+        }
+    ],
+    "edges": [
+        {
+            "id": "edge-2c2426",
+            "label": "edge-2c2426",
+            "order": 0,
+            "source_index": 0,
+            "source": "component-30df56",
+            "target": "component-a50d6d"
+        }
+    ],
+    "variables": {
+        "_BYTES_PER_REDUCER": "10971520",
+        "_DEFAULT_PARALLELISM": "25",
+        "_COPY_PARALLELISM": "(int)$_CLUSTER_NODES_COUNT * 25",
+        "_PARQUET_COMPRESSION": "'GZIP'"
+    }
+}

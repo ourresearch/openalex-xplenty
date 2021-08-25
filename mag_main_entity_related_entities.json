@@ -1,0 +1,158 @@
+{
+    "components": [
+        {
+            "cloud_storage_source_component": {
+                "id": "component-e86eae",
+                "name": "EntityRelatedEntities",
+                "alias": "EntityRelatedEntities",
+                "xy": [
+                    56,
+                    112
+                ],
+                "connection": {
+                    "id": 9943,
+                    "type": "azureblobstorage",
+                    "name": "mag azure"
+                },
+                "schema": {
+                    "valid": true,
+                    "fields": [
+                        {
+                            "name": "field1",
+                            "alias": "entity_id",
+                            "data_type": "long"
+                        },
+                        {
+                            "name": "field2",
+                            "alias": "entity_type",
+                            "data_type": "string"
+                        },
+                        {
+                            "name": "field3",
+                            "alias": "related_entity_id",
+                            "data_type": "long"
+                        },
+                        {
+                            "name": "field4",
+                            "alias": "related_entity_type",
+                            "data_type": "string"
+                        },
+                        {
+                            "name": "field5",
+                            "alias": "related_type",
+                            "data_type": "int"
+                        },
+                        {
+                            "name": "field6",
+                            "alias": "score",
+                            "data_type": "float"
+                        }
+                    ]
+                },
+                "cloud_storage_connection_id": "9943",
+                "bucket": "mag-container",
+                "path": "mag/2021-05-10/advanced/EntityRelatedEntities.txt",
+                "manifest_path": "",
+                "manifest_bucket": "",
+                "manifest_connection": {},
+                "source_path_field_alias": "",
+                "char_encoding": "utf-8",
+                "before_action": "none",
+                "record_delimiter": "new_line",
+                "record_type": "delimited",
+                "json_path": "$",
+                "record_settings": {
+                    "field_delimiter": "\\t",
+                    "text_qualifier": "\"",
+                    "skip_header": false,
+                    "escape_character": "\""
+                }
+            }
+        },
+        {
+            "amazon_redshift_destination_component": {
+                "id": "component-4ef68f",
+                "name": "amazon_redshift_1",
+                "alias": "amazon_redshift_1",
+                "xy": [
+                    56,
+                    252
+                ],
+                "connection": {
+                    "id": 9364,
+                    "type": "redshift",
+                    "name": "redshift ricks"
+                },
+                "schema": {
+                    "valid": true,
+                    "fields": []
+                },
+                "database_connection_id": "9364",
+                "table_name": "mag_advanced_entity_related_entities",
+                "create_table": true,
+                "add_columns": true,
+                "column_mappings": [
+                    {
+                        "field_name": "entity_id",
+                        "column_name": "entity_id",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "entity_type",
+                        "column_name": "entity_type",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "related_entity_id",
+                        "column_name": "related_entity_id",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "related_entity_type",
+                        "column_name": "related_entity_type",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "related_type",
+                        "column_name": "related_type",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "score",
+                        "column_name": "score",
+                        "is_merge_key": false
+                    }
+                ],
+                "operation_type": "truncate_and_insert",
+                "intermediate_compression_type": "gzip",
+                "empty_as_null": true,
+                "blank_as_null": true,
+                "null_string": "\\N",
+                "trim_blanks": true,
+                "max_errors": 1000,
+                "explicit_ids": false,
+                "truncate_columns": true,
+                "round_decimals": true,
+                "replacement_char": "?",
+                "comp_update": "auto",
+                "comp_rows": 100000
+            }
+        }
+    ],
+    "edges": [
+        {
+            "id": "edge-3d81e0",
+            "label": "edge-3d81e0",
+            "order": 0,
+            "source_index": 0,
+            "source": "component-e86eae",
+            "target": "component-4ef68f"
+        }
+    ],
+    "variables": {
+        "_BYTES_PER_REDUCER": "10971520",
+        "_DEFAULT_PARALLELISM": "25",
+        "_COPY_PARALLELISM": "(int)$_CLUSTER_NODES_COUNT * 25",
+        "_PARQUET_COMPRESSION": "'GZIP'"
+    }
+}

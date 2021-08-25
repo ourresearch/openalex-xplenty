@@ -1,0 +1,148 @@
+{
+    "components": [
+        {
+            "cloud_storage_source_component": {
+                "id": "component-e86eae",
+                "name": "RelatedFieldOfStudy",
+                "alias": "RelatedFieldOfStudy",
+                "xy": [
+                    56,
+                    112
+                ],
+                "connection": {
+                    "id": 9943,
+                    "type": "azureblobstorage",
+                    "name": "mag azure"
+                },
+                "schema": {
+                    "valid": true,
+                    "fields": [
+                        {
+                            "name": "field1",
+                            "alias": "field_of_study_id1",
+                            "data_type": "long"
+                        },
+                        {
+                            "name": "field2",
+                            "alias": "type1",
+                            "data_type": "string"
+                        },
+                        {
+                            "name": "field3",
+                            "alias": "field_of_study_id2",
+                            "data_type": "long"
+                        },
+                        {
+                            "name": "field4",
+                            "alias": "type2",
+                            "data_type": "string"
+                        },
+                        {
+                            "name": "field5",
+                            "alias": "rank",
+                            "data_type": "float"
+                        }
+                    ]
+                },
+                "cloud_storage_connection_id": "9943",
+                "bucket": "mag-container",
+                "path": "mag/2021-05-10/advanced/RelatedFieldOfStudy.txt",
+                "manifest_path": "",
+                "manifest_bucket": "",
+                "manifest_connection": {},
+                "source_path_field_alias": "",
+                "char_encoding": "utf-8",
+                "before_action": "none",
+                "record_delimiter": "new_line",
+                "record_type": "delimited",
+                "json_path": "$",
+                "record_settings": {
+                    "field_delimiter": "\\t",
+                    "text_qualifier": "\"",
+                    "skip_header": false,
+                    "escape_character": "\""
+                }
+            }
+        },
+        {
+            "amazon_redshift_destination_component": {
+                "id": "component-4ef68f",
+                "name": "amazon_redshift_1",
+                "alias": "amazon_redshift_1",
+                "xy": [
+                    56,
+                    252
+                ],
+                "connection": {
+                    "id": 9364,
+                    "type": "redshift",
+                    "name": "redshift ricks"
+                },
+                "schema": {
+                    "valid": true,
+                    "fields": []
+                },
+                "database_connection_id": "9364",
+                "table_name": "mag_advanced_related_field_of_study",
+                "create_table": true,
+                "add_columns": true,
+                "column_mappings": [
+                    {
+                        "field_name": "field_of_study_id1",
+                        "column_name": "field_of_study_id1",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "type1",
+                        "column_name": "type1",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "field_of_study_id2",
+                        "column_name": "field_of_study_id2",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "type2",
+                        "column_name": "type2",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "rank",
+                        "column_name": "rank",
+                        "is_merge_key": false
+                    }
+                ],
+                "operation_type": "truncate_and_insert",
+                "intermediate_compression_type": "gzip",
+                "empty_as_null": true,
+                "blank_as_null": true,
+                "null_string": "\\N",
+                "trim_blanks": true,
+                "max_errors": 1000,
+                "explicit_ids": false,
+                "truncate_columns": true,
+                "round_decimals": true,
+                "replacement_char": "?",
+                "comp_update": "auto",
+                "comp_rows": 100000
+            }
+        }
+    ],
+    "edges": [
+        {
+            "id": "edge-3d81e0",
+            "label": "edge-3d81e0",
+            "order": 0,
+            "source_index": 0,
+            "source": "component-e86eae",
+            "target": "component-4ef68f"
+        }
+    ],
+    "variables": {
+        "_BYTES_PER_REDUCER": "10971520",
+        "_DEFAULT_PARALLELISM": "25",
+        "_COPY_PARALLELISM": "(int)$_CLUSTER_NODES_COUNT * 25",
+        "_PARQUET_COMPRESSION": "'GZIP'"
+    }
+}

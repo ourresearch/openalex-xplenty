@@ -1,0 +1,209 @@
+{
+    "components": [
+        {
+            "cloud_storage_source_component": {
+                "id": "component-e86eae",
+                "name": "PaperMeSH",
+                "alias": "PaperMeSH",
+                "xy": [
+                    644,
+                    84
+                ],
+                "connection": {
+                    "id": 9943,
+                    "type": "azureblobstorage",
+                    "name": "mag azure"
+                },
+                "schema": {
+                    "valid": true,
+                    "fields": [
+                        {
+                            "name": "field1",
+                            "alias": "paper_id",
+                            "data_type": "long"
+                        },
+                        {
+                            "name": "field2",
+                            "alias": "descriptor_ui",
+                            "data_type": "string"
+                        },
+                        {
+                            "name": "field3",
+                            "alias": "descriptor_name",
+                            "data_type": "string"
+                        },
+                        {
+                            "name": "field4",
+                            "alias": "qualifier_ui",
+                            "data_type": "string"
+                        },
+                        {
+                            "name": "field5",
+                            "alias": "qualifier_name",
+                            "data_type": "string"
+                        },
+                        {
+                            "name": "field6",
+                            "alias": "is_major_topc",
+                            "data_type": "boolean"
+                        }
+                    ]
+                },
+                "cloud_storage_connection_id": "9943",
+                "bucket": "mag-container",
+                "path": "mag/2021-05-10/advanced/PaperMeSH.txt",
+                "manifest_path": "",
+                "manifest_bucket": "",
+                "manifest_connection": {},
+                "source_path_field_alias": "",
+                "char_encoding": "utf-8",
+                "before_action": "copy",
+                "record_delimiter": "new_line",
+                "record_type": "delimited",
+                "json_path": "$",
+                "record_settings": {
+                    "field_delimiter": "\\t",
+                    "text_qualifier": "\"",
+                    "skip_header": false,
+                    "escape_character": "\""
+                }
+            }
+        },
+        {
+            "amazon_redshift_destination_component": {
+                "id": "component-4ef68f",
+                "name": "amazon_redshift_1",
+                "alias": "amazon_redshift_1",
+                "xy": [
+                    644,
+                    308
+                ],
+                "connection": {
+                    "id": 9364,
+                    "type": "redshift",
+                    "name": "redshift ricks"
+                },
+                "schema": {
+                    "valid": true,
+                    "fields": []
+                },
+                "database_connection_id": "9364",
+                "table_name": "mag_advanced_paper_mesh",
+                "create_table": true,
+                "add_columns": true,
+                "column_mappings": [
+                    {
+                        "field_name": "paper_id",
+                        "column_name": "paper_id",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "descriptor_ui",
+                        "column_name": "descriptor_ui",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "descriptor_name",
+                        "column_name": "descriptor_name",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "qualifier_ui",
+                        "column_name": "qualifier_ui",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "qualifier_name",
+                        "column_name": "qualifier_name",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "is_major_topc",
+                        "column_name": "is_major_topc",
+                        "is_merge_key": false
+                    }
+                ],
+                "operation_type": "append",
+                "intermediate_compression_type": "gzip",
+                "empty_as_null": true,
+                "blank_as_null": true,
+                "null_string": "\\N",
+                "trim_blanks": true,
+                "max_errors": 1000,
+                "explicit_ids": false,
+                "truncate_columns": true,
+                "round_decimals": true,
+                "replacement_char": "?",
+                "comp_update": "auto",
+                "comp_rows": 100000
+            }
+        },
+        {
+            "select_component": {
+                "id": "component-3ec688",
+                "name": "select_1",
+                "alias": "select_1",
+                "xy": [
+                    644,
+                    196
+                ],
+                "fields": [
+                    {
+                        "name": "paper_id",
+                        "projected_name": "paper_id"
+                    },
+                    {
+                        "name": "descriptor_ui",
+                        "projected_name": "descriptor_ui"
+                    },
+                    {
+                        "name": "descriptor_name",
+                        "projected_name": "descriptor_name"
+                    },
+                    {
+                        "name": "qualifier_ui",
+                        "projected_name": "qualifier_ui"
+                    },
+                    {
+                        "name": "qualifier_name",
+                        "projected_name": "qualifier_name"
+                    },
+                    {
+                        "name": "is_major_topc",
+                        "projected_name": "is_major_topc"
+                    }
+                ]
+            }
+        }
+    ],
+    "edges": [
+        {
+            "id": "edge-593389",
+            "order": 0,
+            "source_index": 0,
+            "source": "component-e86eae",
+            "target": "component-3ec688"
+        },
+        {
+            "id": "edge-df431f",
+            "order": 0,
+            "source_index": 0,
+            "source": "component-3ec688",
+            "target": "component-4ef68f"
+        }
+    ],
+    "variables": {
+        "_BYTES_PER_REDUCER": "10971520",
+        "_DEFAULT_PARALLELISM": "25",
+        "_COPY_PARALLELISM": "(int)$_CLUSTER_NODES_COUNT * 25",
+        "_PARQUET_COMPRESSION": "'GZIP'",
+        "_MAP_MAX_ATTEMPTS": "10",
+        "_REDUCER_MAX_ATTEMPTS": "10",
+        "_MAP_TASK_TIMEOUT": "1200 * 1000",
+        "_FS_SFTP_MAX_RETRIES": "10",
+        "_FS_SFTP_RETRY_SLEEP": "1000",
+        "_FS_SFTP_BLOCK_SIZE": "128 * 1024 * 1024",
+        "_HTTP_REQUEST_MAX_RETRIES": "16",
+        "_SYNC_WAIT_TIME": "10"
+    }
+}
