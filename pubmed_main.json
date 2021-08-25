@@ -1,0 +1,1540 @@
+{
+    "components": [
+        {
+            "database_source_component": {
+                "id": "component-b03b7a",
+                "name": "pg_oadoi_pub_table",
+                "alias": "pg_oadoi_pub_table",
+                "xy": [
+                    1848,
+                    84
+                ],
+                "connection": {
+                    "id": 9404,
+                    "type": "herokupostgres",
+                    "name": "pg oadoi"
+                },
+                "schema": {
+                    "valid": true,
+                    "fields": [
+                        {
+                            "name": "id",
+                            "alias": "id",
+                            "data_type": "string"
+                        },
+                        {
+                            "name": "updated",
+                            "alias": "updated",
+                            "data_type": "datetime"
+                        },
+                        {
+                            "name": "last_changed_date",
+                            "alias": "last_changed_date",
+                            "data_type": "datetime"
+                        },
+                        {
+                            "name": "crossref_api_raw_new",
+                            "alias": "crossref_api_raw_new",
+                            "data_type": "string"
+                        }
+                    ]
+                },
+                "database_connection_id": "9404",
+                "access_mode": "query",
+                "schema_name": "",
+                "table_name": "",
+                "where_clause": "",
+                "query": "select id, updated, last_changed_date, crossref_api_raw_new from pub\n-- where updated > '$_PACKAGE_LAST_SUCCESSFUL_JOB_SUBMISSION_TIMESTAMP'\nwhere updated >= '2021-01-15'\nand updated < '2021-02-01'\n-- FAILED where updated >= '2021-01-01'\n-- and updated < '2021-02-01'\n-- WORKED where updated >= '2021-02-01'\n-- and updated < '2021-04-01'\n-- STOPPED, where updated >= '2021-01-01'\n-- and updated < '2021-04-01'\n-- WORKED where updated >= '2021-04-01'\n-- and updated < '2021-07-01'\n-- FAILED where updated >= '2021-02-01'\n-- and updated < '2021-07-01",
+                "split_by_column_name": "",
+                "parallel": 1,
+                "before_action": "none"
+            }
+        },
+        {
+            "select_component": {
+                "id": "component-67d01c",
+                "name": "derive_api_parsed",
+                "alias": "derive_api_parsed",
+                "xy": [
+                    1848,
+                    252
+                ],
+                "fields": [
+                    {
+                        "name": "id",
+                        "projected_name": "doi"
+                    },
+                    {
+                        "name": "updated",
+                        "projected_name": "updated"
+                    },
+                    {
+                        "name": "last_changed_date",
+                        "projected_name": "last_changed_date"
+                    },
+                    {
+                        "name": "crossref_api_raw_new",
+                        "projected_name": "api_raw"
+                    },
+                    {
+                        "name": "JsonStringToMap(crossref_api_raw_new)",
+                        "projected_name": "api_map"
+                    }
+                ]
+            }
+        },
+        {
+            "amazon_redshift_destination_component": {
+                "id": "component-cbf562",
+                "name": "store_crossref_main_works",
+                "alias": "store_crossref_main_works",
+                "xy": [
+                    1624,
+                    756
+                ],
+                "connection": {
+                    "id": 9364,
+                    "type": "redshift",
+                    "name": "redshift ricks"
+                },
+                "schema": {
+                    "valid": true,
+                    "fields": []
+                },
+                "database_connection_id": "9364",
+                "table_name": "crossref_main_works",
+                "create_table": true,
+                "add_columns": true,
+                "post_action_sql": "",
+                "column_mappings": [
+                    {
+                        "field_name": "doi",
+                        "column_name": "doi",
+                        "is_merge_key": true
+                    },
+                    {
+                        "field_name": "updated",
+                        "column_name": "updated",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "last_changed_date",
+                        "column_name": "last_changed_date",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "publisher",
+                        "column_name": "publisher",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "title",
+                        "column_name": "title",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "original_title",
+                        "column_name": "original_title",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "short_title",
+                        "column_name": "short_title",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "abstract",
+                        "column_name": "abstract",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "reference_count",
+                        "column_name": "reference_count",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "references_count",
+                        "column_name": "references_count",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "is_referenced_by_count",
+                        "column_name": "is_referenced_by_count",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "source",
+                        "column_name": "source",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "prefix",
+                        "column_name": "prefix",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "url",
+                        "column_name": "url",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "member",
+                        "column_name": "member",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "type",
+                        "column_name": "type",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "created",
+                        "column_name": "created",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "deposited",
+                        "column_name": "deposited",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "indexed",
+                        "column_name": "indexed",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "issued",
+                        "column_name": "issued",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "posted",
+                        "column_name": "posted",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "accepted",
+                        "column_name": "accepted",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "subtitle",
+                        "column_name": "subtitle",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "container_title",
+                        "column_name": "container_title",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "short_container_title",
+                        "column_name": "short_container_title",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "group_title",
+                        "column_name": "group_title",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "issue",
+                        "column_name": "issue",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "volume",
+                        "column_name": "volume",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "page",
+                        "column_name": "page",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "article_number",
+                        "column_name": "article_number",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "published_print",
+                        "column_name": "published_print",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "published_online",
+                        "column_name": "published_online",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "subject",
+                        "column_name": "subject",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "issn",
+                        "column_name": "issn",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "issn_type",
+                        "column_name": "issn_type",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "archive",
+                        "column_name": "archive",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "license",
+                        "column_name": "license",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "funder",
+                        "column_name": "funder",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "assertion",
+                        "column_name": "assertion",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "editor",
+                        "column_name": "editor",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "chair",
+                        "column_name": "chair",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "translator",
+                        "column_name": "translator",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "update_to",
+                        "column_name": "update_to",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "update_policy",
+                        "column_name": "update_policy",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "link",
+                        "column_name": "link",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "clinical_trial_number",
+                        "column_name": "clinical_trial_number",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "alternative_id",
+                        "column_name": "alternative_id",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "content_domain",
+                        "column_name": "content_domain",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "relation",
+                        "column_name": "relation",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "review",
+                        "column_name": "review",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "publisher_location",
+                        "column_name": "publisher_location",
+                        "is_merge_key": false
+                    }
+                ],
+                "operation_type": "merge",
+                "intermediate_compression_type": "gzip",
+                "empty_as_null": true,
+                "blank_as_null": true,
+                "null_string": "\\N",
+                "trim_blanks": true,
+                "max_errors": 10000,
+                "explicit_ids": false,
+                "truncate_columns": true,
+                "round_decimals": true,
+                "replacement_char": "?",
+                "comp_update": "auto",
+                "comp_rows": 100000
+            }
+        },
+        {
+            "clone_component": {
+                "id": "component-6b3f0e",
+                "name": "clone_1",
+                "alias": "clone_1",
+                "xy": [
+                    1848,
+                    420
+                ]
+            }
+        },
+        {
+            "select_component": {
+                "id": "component-2493fc",
+                "name": "extract_reference",
+                "alias": "extract_reference",
+                "xy": [
+                    1848,
+                    588
+                ],
+                "fields": [
+                    {
+                        "name": "doi",
+                        "projected_name": "doi"
+                    },
+                    {
+                        "name": "updated",
+                        "projected_name": "updated"
+                    },
+                    {
+                        "name": "JsonStringToBag(api_map#'reference')",
+                        "projected_name": "reference_bag"
+                    },
+                    {
+                        "name": "api_map",
+                        "projected_name": "api_map"
+                    }
+                ]
+            }
+        },
+        {
+            "amazon_redshift_destination_component": {
+                "id": "component-c18a6f",
+                "name": "store_crossref_main_reference",
+                "alias": "store_crossref_main_reference",
+                "xy": [
+                    1848,
+                    1596
+                ],
+                "connection": {
+                    "id": 9364,
+                    "type": "redshift",
+                    "name": "redshift ricks"
+                },
+                "schema": {
+                    "valid": true,
+                    "fields": []
+                },
+                "database_connection_id": "9364",
+                "table_name": "crossref_main_reference",
+                "create_table": true,
+                "add_columns": true,
+                "column_mappings": [
+                    {
+                        "field_name": "doi",
+                        "column_name": "doi",
+                        "is_merge_key": true
+                    },
+                    {
+                        "field_name": "reference_number",
+                        "column_name": "reference_number",
+                        "is_merge_key": true
+                    },
+                    {
+                        "field_name": "updated",
+                        "column_name": "updated",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "reference",
+                        "column_name": "reference",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "doi_referenced",
+                        "column_name": "doi_referenced",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "key",
+                        "column_name": "key",
+                        "is_merge_key": false
+                    }
+                ],
+                "operation_type": "merge",
+                "intermediate_compression_type": "none",
+                "empty_as_null": false,
+                "blank_as_null": false,
+                "null_string": "\\N",
+                "trim_blanks": true,
+                "max_errors": 0,
+                "explicit_ids": false,
+                "truncate_columns": true,
+                "round_decimals": true,
+                "replacement_char": "?",
+                "comp_update": "auto",
+                "comp_rows": 100000
+            }
+        },
+        {
+            "select_component": {
+                "id": "component-d4800a",
+                "name": "break_out_crossref",
+                "alias": "break_out_crossref",
+                "xy": [
+                    1624,
+                    588
+                ],
+                "fields": [
+                    {
+                        "name": "doi",
+                        "projected_name": "doi"
+                    },
+                    {
+                        "name": "updated",
+                        "projected_name": "updated"
+                    },
+                    {
+                        "name": "last_changed_date",
+                        "projected_name": "last_changed_date"
+                    },
+                    {
+                        "name": "api_map#'publisher'",
+                        "projected_name": "publisher"
+                    },
+                    {
+                        "name": "api_map#'title'",
+                        "projected_name": "title"
+                    },
+                    {
+                        "name": "api_map#'original-title'",
+                        "projected_name": "original_title"
+                    },
+                    {
+                        "name": "api_map#'short-title'",
+                        "projected_name": "short_title"
+                    },
+                    {
+                        "name": "api_map#'abstract'",
+                        "projected_name": "abstract"
+                    },
+                    {
+                        "name": "api_map#'reference-count'",
+                        "projected_name": "reference_count"
+                    },
+                    {
+                        "name": "api_map#'references-count'",
+                        "projected_name": "references_count"
+                    },
+                    {
+                        "name": "api_map#'is-referenced-by-count'",
+                        "projected_name": "is_referenced_by_count"
+                    },
+                    {
+                        "name": "api_map#'source'",
+                        "projected_name": "source"
+                    },
+                    {
+                        "name": "api_map#'prefix'",
+                        "projected_name": "prefix"
+                    },
+                    {
+                        "name": "api_map#'URL'",
+                        "projected_name": "url"
+                    },
+                    {
+                        "name": "api_map#'member'",
+                        "projected_name": "member"
+                    },
+                    {
+                        "name": "api_map#'type'",
+                        "projected_name": "type"
+                    },
+                    {
+                        "name": "api_map#'created'",
+                        "projected_name": "created"
+                    },
+                    {
+                        "name": "api_map#'deposited'",
+                        "projected_name": "deposited"
+                    },
+                    {
+                        "name": "api_map#'indexed'",
+                        "projected_name": "indexed"
+                    },
+                    {
+                        "name": "api_map#'issued'",
+                        "projected_name": "issued"
+                    },
+                    {
+                        "name": "api_map#'posted'",
+                        "projected_name": "posted"
+                    },
+                    {
+                        "name": "api_map#'accepted'",
+                        "projected_name": "accepted"
+                    },
+                    {
+                        "name": "api_map#'subtitle'",
+                        "projected_name": "subtitle"
+                    },
+                    {
+                        "name": "api_map#'container-title'",
+                        "projected_name": "container_title"
+                    },
+                    {
+                        "name": "api_map#'short-container-title'",
+                        "projected_name": "short_container_title"
+                    },
+                    {
+                        "name": "api_map#'group-title'",
+                        "projected_name": "group_title"
+                    },
+                    {
+                        "name": "api_map#'issue'",
+                        "projected_name": "issue"
+                    },
+                    {
+                        "name": "api_map#'volume'",
+                        "projected_name": "volume"
+                    },
+                    {
+                        "name": "api_map#'page'",
+                        "projected_name": "page"
+                    },
+                    {
+                        "name": "api_map#'article-number'",
+                        "projected_name": "article_number"
+                    },
+                    {
+                        "name": "api_map#'published-print'",
+                        "projected_name": "published_print"
+                    },
+                    {
+                        "name": "api_map#'published-online'",
+                        "projected_name": "published_online"
+                    },
+                    {
+                        "name": "api_map#'subject'",
+                        "projected_name": "subject"
+                    },
+                    {
+                        "name": "api_map#'ISSN'",
+                        "projected_name": "issn"
+                    },
+                    {
+                        "name": "api_map#'issn-type'",
+                        "projected_name": "issn_type"
+                    },
+                    {
+                        "name": "api_map#'archive'",
+                        "projected_name": "archive"
+                    },
+                    {
+                        "name": "api_map#'license'",
+                        "projected_name": "license"
+                    },
+                    {
+                        "name": "api_map#'funder'",
+                        "projected_name": "funder"
+                    },
+                    {
+                        "name": "api_map#'assertion'",
+                        "projected_name": "assertion"
+                    },
+                    {
+                        "name": "api_map#'editor'",
+                        "projected_name": "editor"
+                    },
+                    {
+                        "name": "api_map#'chair'",
+                        "projected_name": "chair"
+                    },
+                    {
+                        "name": "api_map#'translator'",
+                        "projected_name": "translator"
+                    },
+                    {
+                        "name": "api_map#'update-to'",
+                        "projected_name": "update_to"
+                    },
+                    {
+                        "name": "api_map#'update-policy'",
+                        "projected_name": "update_policy"
+                    },
+                    {
+                        "name": "api_map#'link'",
+                        "projected_name": "link"
+                    },
+                    {
+                        "name": "api_map#'clinical-trial-number'",
+                        "projected_name": "clinical_trial_number"
+                    },
+                    {
+                        "name": "api_map#'alternative-id'",
+                        "projected_name": "alternative_id"
+                    },
+                    {
+                        "name": "api_map#'content-domain'",
+                        "projected_name": "content_domain"
+                    },
+                    {
+                        "name": "api_map#'relation'",
+                        "projected_name": "relation"
+                    },
+                    {
+                        "name": "api_map#'review'",
+                        "projected_name": "review"
+                    },
+                    {
+                        "name": "api_map#'publisher-location'",
+                        "projected_name": "publisher_location"
+                    }
+                ]
+            }
+        },
+        {
+            "select_component": {
+                "id": "component-9ef605",
+                "name": "flatten_reference_bag",
+                "alias": "flatten_reference_bag",
+                "xy": [
+                    1848,
+                    756
+                ],
+                "fields": [
+                    {
+                        "name": "doi",
+                        "projected_name": "doi"
+                    },
+                    {
+                        "name": "updated",
+                        "projected_name": "updated"
+                    },
+                    {
+                        "name": "Flatten(reference_bag)",
+                        "projected_name": "reference_string"
+                    }
+                ]
+            }
+        },
+        {
+            "select_component": {
+                "id": "component-e2a5b3",
+                "name": "reference_map",
+                "alias": "reference_map",
+                "xy": [
+                    1848,
+                    924
+                ],
+                "fields": [
+                    {
+                        "name": "doi",
+                        "projected_name": "doi"
+                    },
+                    {
+                        "name": "updated",
+                        "projected_name": "updated"
+                    },
+                    {
+                        "name": "JsonStringToMap(reference_string)",
+                        "projected_name": "reference_map"
+                    },
+                    {
+                        "name": "reference_string",
+                        "projected_name": "reference_string"
+                    }
+                ]
+            }
+        },
+        {
+            "select_component": {
+                "id": "component-a348f1",
+                "name": "json_parse_reference",
+                "alias": "json_parse_reference",
+                "xy": [
+                    1848,
+                    1428
+                ],
+                "fields": [
+                    {
+                        "name": "doi",
+                        "projected_name": "doi"
+                    },
+                    {
+                        "name": "reference_number",
+                        "projected_name": "reference_number"
+                    },
+                    {
+                        "name": "updated",
+                        "projected_name": "updated"
+                    },
+                    {
+                        "name": "reference_string",
+                        "projected_name": "reference"
+                    },
+                    {
+                        "name": "LOWER(reference_map#'DOI')",
+                        "projected_name": "doi_referenced"
+                    },
+                    {
+                        "name": "reference_map#'key'",
+                        "projected_name": "key"
+                    }
+                ]
+            }
+        },
+        {
+            "select_component": {
+                "id": "component-2dfbf2",
+                "name": "extract_author",
+                "alias": "extract_author",
+                "xy": [
+                    2072,
+                    588
+                ],
+                "fields": [
+                    {
+                        "name": "doi",
+                        "projected_name": "doi"
+                    },
+                    {
+                        "name": "updated",
+                        "projected_name": "updated"
+                    },
+                    {
+                        "name": "JsonStringToBag(api_map#'author')",
+                        "projected_name": "author_bag"
+                    },
+                    {
+                        "name": "api_map",
+                        "projected_name": "api_map"
+                    }
+                ]
+            }
+        },
+        {
+            "amazon_redshift_destination_component": {
+                "id": "component-408776",
+                "name": "store_crossref_main_author",
+                "alias": "store_crossref_main_author",
+                "xy": [
+                    1960,
+                    1764
+                ],
+                "connection": {
+                    "id": 9364,
+                    "type": "redshift",
+                    "name": "redshift ricks"
+                },
+                "schema": {
+                    "valid": true,
+                    "fields": []
+                },
+                "database_connection_id": "9364",
+                "table_name": "crossref_main_author",
+                "create_table": true,
+                "add_columns": true,
+                "column_mappings": [
+                    {
+                        "field_name": "doi",
+                        "column_name": "doi",
+                        "is_merge_key": true
+                    },
+                    {
+                        "field_name": "author_order",
+                        "column_name": "author_order",
+                        "is_merge_key": true
+                    },
+                    {
+                        "field_name": "updated",
+                        "column_name": "updated",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "family",
+                        "column_name": "family",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "given",
+                        "column_name": "given",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "orcid",
+                        "column_name": "orcid",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "authenticated_orcid",
+                        "column_name": "authenticated_orcid",
+                        "is_merge_key": false
+                    }
+                ],
+                "operation_type": "merge",
+                "intermediate_compression_type": "none",
+                "empty_as_null": false,
+                "blank_as_null": false,
+                "null_string": "\\N",
+                "trim_blanks": true,
+                "max_errors": 0,
+                "explicit_ids": false,
+                "truncate_columns": true,
+                "round_decimals": true,
+                "replacement_char": "?",
+                "comp_update": "auto",
+                "comp_rows": 100000
+            }
+        },
+        {
+            "select_component": {
+                "id": "component-176a98",
+                "name": "flatten_author_bag",
+                "alias": "flatten_author_bag",
+                "xy": [
+                    2072,
+                    756
+                ],
+                "fields": [
+                    {
+                        "name": "doi",
+                        "projected_name": "doi"
+                    },
+                    {
+                        "name": "updated",
+                        "projected_name": "updated"
+                    },
+                    {
+                        "name": "Flatten(author_bag)",
+                        "projected_name": "author_string"
+                    }
+                ]
+            }
+        },
+        {
+            "select_component": {
+                "id": "component-2edd85",
+                "name": "author_map",
+                "alias": "author_map",
+                "xy": [
+                    2072,
+                    924
+                ],
+                "fields": [
+                    {
+                        "name": "doi",
+                        "projected_name": "doi"
+                    },
+                    {
+                        "name": "updated",
+                        "projected_name": "updated"
+                    },
+                    {
+                        "name": "JsonStringToMap(author_string)",
+                        "projected_name": "author_map"
+                    },
+                    {
+                        "name": "author_string",
+                        "projected_name": "author_string"
+                    }
+                ]
+            }
+        },
+        {
+            "select_component": {
+                "id": "component-938633",
+                "name": "json_parse_author",
+                "alias": "json_parse_author",
+                "xy": [
+                    2072,
+                    1428
+                ],
+                "fields": [
+                    {
+                        "name": "doi",
+                        "projected_name": "doi"
+                    },
+                    {
+                        "name": "author_order",
+                        "projected_name": "author_order"
+                    },
+                    {
+                        "name": "updated",
+                        "projected_name": "updated"
+                    },
+                    {
+                        "name": "author_map#'family'",
+                        "projected_name": "family"
+                    },
+                    {
+                        "name": "author_map#'given'",
+                        "projected_name": "given"
+                    },
+                    {
+                        "name": "author_map#'ORCID'",
+                        "projected_name": "orcid"
+                    },
+                    {
+                        "name": "author_map#'authenticated-orcid'",
+                        "projected_name": "authenticated_orcid"
+                    },
+                    {
+                        "name": "author_map#'affiliation'",
+                        "projected_name": "affiliation_string"
+                    }
+                ]
+            }
+        },
+        {
+            "clone_component": {
+                "id": "component-4c1567",
+                "name": "clone_2",
+                "alias": "clone_2",
+                "xy": [
+                    2072,
+                    1596
+                ]
+            }
+        },
+        {
+            "amazon_redshift_destination_component": {
+                "id": "component-51b2a2",
+                "name": "store_crossref_main_affiliation",
+                "alias": "store_crossref_main_affiliation",
+                "xy": [
+                    2184,
+                    2436
+                ],
+                "connection": {
+                    "id": 9364,
+                    "type": "redshift",
+                    "name": "redshift ricks"
+                },
+                "schema": {
+                    "valid": true,
+                    "fields": []
+                },
+                "database_connection_id": "9364",
+                "table_name": "crossref_main_affiliation",
+                "create_table": true,
+                "add_columns": true,
+                "post_action_sql": "",
+                "column_mappings": [
+                    {
+                        "field_name": "doi",
+                        "column_name": "doi",
+                        "is_merge_key": true
+                    },
+                    {
+                        "field_name": "author_order",
+                        "column_name": "author_order",
+                        "is_merge_key": true
+                    },
+                    {
+                        "field_name": "affiliation_number",
+                        "column_name": "affiliation_number",
+                        "is_merge_key": true
+                    },
+                    {
+                        "field_name": "affiliation",
+                        "column_name": "affiliation",
+                        "is_merge_key": false
+                    },
+                    {
+                        "field_name": "updated",
+                        "column_name": "updated",
+                        "is_merge_key": false
+                    }
+                ],
+                "operation_type": "merge",
+                "intermediate_compression_type": "gzip",
+                "empty_as_null": true,
+                "blank_as_null": true,
+                "null_string": "\\N",
+                "trim_blanks": true,
+                "max_errors": 10000,
+                "explicit_ids": false,
+                "truncate_columns": true,
+                "round_decimals": true,
+                "replacement_char": "?",
+                "comp_update": "auto",
+                "comp_rows": 100000
+            }
+        },
+        {
+            "select_component": {
+                "id": "component-c8ba99",
+                "name": "break_out_author",
+                "alias": "break_out_author",
+                "xy": [
+                    2184,
+                    1764
+                ],
+                "fields": [
+                    {
+                        "name": "doi",
+                        "projected_name": "doi"
+                    },
+                    {
+                        "name": "author_order",
+                        "projected_name": "author_order"
+                    },
+                    {
+                        "name": "updated",
+                        "projected_name": "updated"
+                    },
+                    {
+                        "name": "JsonStringToBag(affiliation_string)",
+                        "projected_name": "affiliation_bag"
+                    }
+                ]
+            }
+        },
+        {
+            "window_component": {
+                "id": "component-1efb57",
+                "name": "reference_number_reversed",
+                "alias": "reference_number_reversed",
+                "xy": [
+                    1848,
+                    1092
+                ],
+                "partitioned_fields": [
+                    {
+                        "field_name": "doi"
+                    }
+                ],
+                "ordered_fields": [],
+                "windowed_fields": [
+                    {
+                        "alias": "reference_number_reversed",
+                        "default_value": "",
+                        "function_name": "row_number",
+                        "field_name": "doi",
+                        "ntiles": "",
+                        "offset": "",
+                        "range_after": "",
+                        "range_before": ""
+                    }
+                ],
+                "grouping_type": "group_by",
+                "data_order": "no_sort"
+            }
+        },
+        {
+            "window_component": {
+                "id": "component-ff8145",
+                "name": "author_order_reversed",
+                "alias": "author_order_reversed",
+                "xy": [
+                    2072,
+                    1092
+                ],
+                "partitioned_fields": [
+                    {
+                        "field_name": "doi"
+                    }
+                ],
+                "ordered_fields": [],
+                "windowed_fields": [
+                    {
+                        "alias": "author_order_reversed",
+                        "default_value": "",
+                        "function_name": "row_number",
+                        "field_name": "doi",
+                        "ntiles": "",
+                        "offset": "",
+                        "range_after": "",
+                        "range_before": ""
+                    }
+                ],
+                "grouping_type": "group_by",
+                "data_order": "no_sort"
+            }
+        },
+        {
+            "window_component": {
+                "id": "component-00f4f0",
+                "name": "reference_number",
+                "alias": "reference_number",
+                "xy": [
+                    1848,
+                    1260
+                ],
+                "partitioned_fields": [
+                    {
+                        "field_name": "doi"
+                    }
+                ],
+                "ordered_fields": [
+                    {
+                        "order_type": "DESC",
+                        "name": "reference_number_reversed"
+                    }
+                ],
+                "windowed_fields": [
+                    {
+                        "alias": "reference_number",
+                        "default_value": "",
+                        "function_name": "row_number",
+                        "field_name": "doi",
+                        "ntiles": "",
+                        "offset": "",
+                        "range_after": "",
+                        "range_before": ""
+                    }
+                ],
+                "grouping_type": "group_by",
+                "data_order": "sort"
+            }
+        },
+        {
+            "window_component": {
+                "id": "component-3dbf61",
+                "name": "author_order",
+                "alias": "author_order",
+                "xy": [
+                    2072,
+                    1260
+                ],
+                "partitioned_fields": [
+                    {
+                        "field_name": "doi"
+                    }
+                ],
+                "ordered_fields": [
+                    {
+                        "order_type": "DESC",
+                        "name": "author_order_reversed"
+                    }
+                ],
+                "windowed_fields": [
+                    {
+                        "alias": "author_order",
+                        "default_value": "",
+                        "function_name": "row_number",
+                        "field_name": "doi",
+                        "ntiles": "",
+                        "offset": "",
+                        "range_after": "",
+                        "range_before": ""
+                    }
+                ],
+                "grouping_type": "group_by",
+                "data_order": "sort"
+            }
+        },
+        {
+            "window_component": {
+                "id": "component-4f8f10",
+                "name": "affiliation_number_reversed",
+                "alias": "affiliation_number_reversed",
+                "xy": [
+                    2184,
+                    2100
+                ],
+                "partitioned_fields": [
+                    {
+                        "field_name": "doi"
+                    },
+                    {
+                        "field_name": "author_order"
+                    }
+                ],
+                "ordered_fields": [],
+                "windowed_fields": [
+                    {
+                        "alias": "affiliation_number_reversed",
+                        "default_value": "",
+                        "function_name": "row_number",
+                        "field_name": "doi",
+                        "ntiles": "",
+                        "offset": "",
+                        "range_after": "",
+                        "range_before": ""
+                    }
+                ],
+                "grouping_type": "group_by",
+                "data_order": "no_sort"
+            }
+        },
+        {
+            "window_component": {
+                "id": "component-fc1721",
+                "name": "affiliation_number",
+                "alias": "affiliation_number",
+                "xy": [
+                    2184,
+                    2268
+                ],
+                "partitioned_fields": [
+                    {
+                        "field_name": "doi"
+                    },
+                    {
+                        "field_name": "author_order"
+                    }
+                ],
+                "ordered_fields": [
+                    {
+                        "order_type": "DESC",
+                        "name": "affiliation_number_reversed"
+                    }
+                ],
+                "windowed_fields": [
+                    {
+                        "alias": "affiliation_number",
+                        "default_value": "",
+                        "function_name": "row_number",
+                        "field_name": "doi",
+                        "ntiles": "",
+                        "offset": "",
+                        "range_after": "",
+                        "range_before": ""
+                    }
+                ],
+                "grouping_type": "group_by",
+                "data_order": "sort"
+            }
+        },
+        {
+            "select_component": {
+                "id": "component-6f8f90",
+                "name": "copy_of_break_out_author",
+                "alias": "copy_of_break_out_author",
+                "xy": [
+                    2184,
+                    1932
+                ],
+                "fields": [
+                    {
+                        "name": "doi",
+                        "projected_name": "doi"
+                    },
+                    {
+                        "name": "author_order",
+                        "projected_name": "author_order"
+                    },
+                    {
+                        "name": "updated",
+                        "projected_name": "updated"
+                    },
+                    {
+                        "name": "Flatten(affiliation_bag)",
+                        "projected_name": "affiliation"
+                    }
+                ]
+            }
+        }
+    ],
+    "edges": [
+        {
+            "id": "edge-a112ac",
+            "label": "edge-a112ac",
+            "order": 0,
+            "source_index": 0,
+            "source": "component-b03b7a",
+            "target": "component-67d01c"
+        },
+        {
+            "id": "edge-5f34ec",
+            "label": "edge-5f34ec",
+            "order": 0,
+            "source_index": 0,
+            "source": "component-67d01c",
+            "target": "component-6b3f0e"
+        },
+        {
+            "id": "edge-34ff23",
+            "label": "edge-34ff23",
+            "order": 0,
+            "source_index": 1,
+            "source": "component-6b3f0e",
+            "target": "component-2493fc"
+        },
+        {
+            "id": "edge-61139e",
+            "label": "edge-61139e",
+            "order": 0,
+            "source_index": 0,
+            "source": "component-6b3f0e",
+            "target": "component-d4800a"
+        },
+        {
+            "id": "edge-4fcb41",
+            "label": "edge-4fcb41",
+            "order": 0,
+            "source_index": 0,
+            "source": "component-d4800a",
+            "target": "component-cbf562"
+        },
+        {
+            "id": "edge-ba306c",
+            "label": "edge-ba306c",
+            "order": 0,
+            "source_index": 0,
+            "source": "component-2493fc",
+            "target": "component-9ef605"
+        },
+        {
+            "id": "edge-0d7601",
+            "label": "edge-0d7601",
+            "order": 0,
+            "source_index": 0,
+            "source": "component-9ef605",
+            "target": "component-e2a5b3"
+        },
+        {
+            "id": "edge-ad56ad",
+            "label": "edge-ad56ad",
+            "order": 0,
+            "source_index": 0,
+            "source": "component-a348f1",
+            "target": "component-c18a6f"
+        },
+        {
+            "id": "edge-4ab3a7",
+            "label": "edge-ba306c",
+            "order": 0,
+            "source_index": 0,
+            "source": "component-2dfbf2",
+            "target": "component-176a98"
+        },
+        {
+            "id": "edge-6e6d96",
+            "label": "edge-0d7601",
+            "order": 0,
+            "source_index": 0,
+            "source": "component-176a98",
+            "target": "component-2edd85"
+        },
+        {
+            "id": "edge-1a0cd4",
+            "label": "edge-1a0cd4",
+            "order": 0,
+            "source_index": 2,
+            "source": "component-6b3f0e",
+            "target": "component-2dfbf2"
+        },
+        {
+            "id": "edge-543cd6",
+            "label": "edge-543cd6",
+            "order": 0,
+            "source_index": 0,
+            "source": "component-4c1567",
+            "target": "component-c8ba99"
+        },
+        {
+            "id": "edge-0f9cf1",
+            "label": "edge-0f9cf1",
+            "order": 0,
+            "source_index": 0,
+            "source": "component-938633",
+            "target": "component-4c1567"
+        },
+        {
+            "id": "edge-a3204d",
+            "label": "edge-a3204d",
+            "order": 0,
+            "source_index": 1,
+            "source": "component-4c1567",
+            "target": "component-408776"
+        },
+        {
+            "id": "edge-bf5fe4",
+            "label": "edge-bf5fe4",
+            "order": 0,
+            "source_index": 0,
+            "source": "component-e2a5b3",
+            "target": "component-1efb57"
+        },
+        {
+            "id": "edge-83b622",
+            "label": "edge-83b622",
+            "order": 0,
+            "source_index": 0,
+            "source": "component-2edd85",
+            "target": "component-ff8145"
+        },
+        {
+            "id": "edge-ebd58a",
+            "label": "edge-ebd58a",
+            "order": 0,
+            "source_index": 0,
+            "source": "component-1efb57",
+            "target": "component-00f4f0"
+        },
+        {
+            "id": "edge-966806",
+            "label": "edge-966806",
+            "order": 0,
+            "source_index": 0,
+            "source": "component-00f4f0",
+            "target": "component-a348f1"
+        },
+        {
+            "id": "edge-d8bef7",
+            "label": "edge-d8bef7",
+            "order": 0,
+            "source_index": 0,
+            "source": "component-ff8145",
+            "target": "component-3dbf61"
+        },
+        {
+            "id": "edge-e15f09",
+            "label": "edge-e15f09",
+            "order": 0,
+            "source_index": 0,
+            "source": "component-3dbf61",
+            "target": "component-938633"
+        },
+        {
+            "id": "edge-28c447",
+            "label": "edge-28c447",
+            "order": 0,
+            "source_index": 0,
+            "source": "component-4f8f10",
+            "target": "component-fc1721"
+        },
+        {
+            "id": "edge-90aba2",
+            "label": "edge-90aba2",
+            "order": 0,
+            "source_index": 0,
+            "source": "component-fc1721",
+            "target": "component-51b2a2"
+        },
+        {
+            "id": "edge-0b6bca",
+            "label": "edge-0b6bca",
+            "order": 0,
+            "source_index": 0,
+            "source": "component-c8ba99",
+            "target": "component-6f8f90"
+        },
+        {
+            "id": "edge-44a253",
+            "label": "edge-44a253",
+            "order": 0,
+            "source_index": 0,
+            "source": "component-6f8f90",
+            "target": "component-4f8f10"
+        }
+    ],
+    "variables": {
+        "_EXEC_TYPE": "'mapreduce'",
+        "_SYNC_WAIT_TIME": "10"
+    }
+}
